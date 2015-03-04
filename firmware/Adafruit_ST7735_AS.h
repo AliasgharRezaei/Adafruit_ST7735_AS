@@ -124,6 +124,7 @@ class Adafruit_ST7735_AS : public Adafruit_GFX_AS {
   Adafruit_ST7735_AS(uint8_t CS, uint8_t RS, uint8_t RST);
 
   void     initB(void),                             // for ST7735B displays
+           initG(void),                             // for ILI9163C displays
            initR(uint8_t options = INITR_GREENTAB), // for ST7735R
            setAddrWindow(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1),
            pushColor(uint16_t color),
