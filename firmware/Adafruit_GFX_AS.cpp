@@ -56,8 +56,10 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifdef __AVR__
  #include <avr/pgmspace.h>
 #else
- #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+  #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+  #define pgm_read_word(addr) (*(const unsigned short *)(addr))
 #endif
+
 
 Adafruit_GFX_AS::Adafruit_GFX_AS(int16_t w, int16_t h):
   WIDTH(w), HEIGHT(h)
