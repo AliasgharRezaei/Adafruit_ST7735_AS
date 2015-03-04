@@ -94,6 +94,27 @@ Adafruit_ST7735_AS::Adafruit_ST7735_AS(uint8_t cs, uint8_t rs, uint8_t rst) :
 #define __AVR__
 #endif
 
+
+#if defined(SPARK)
+inline void Adafruit_ST7735_AS::spiwrite(uint8_t c) {
+  SPI.transfer(c);
+}
+
+void Adafruit_ST7735_AS::writecommand(uint8_t c) {
+  digitalWrite(_rs, LOW);
+  digitalWrite(_cs, LOW);
+  spiwrite(c);
+  digitalWrite(_cs, HIGH);
+}
+
+void Adafruit_ST7735_AS::writedata(uint8_t c) {
+  digitalWrite(_rs, HIGH);
+  digitalWrite(_cs, LOW); 
+  spiwrite(c);
+  digitalWrite(_cs, HIGH);
+} 
+#endif
+
 #ifdef __AVR__
 inline void Adafruit_ST7735_AS::spiwrite(uint8_t c) {
 
