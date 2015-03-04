@@ -36,33 +36,6 @@ inline uint16_t swapcolor(uint16_t x) {
 }
 
 
-// // Constructor when using software SPI.  All output pins are configurable.
-// Adafruit_ST7735_AS::Adafruit_ST7735_AS(uint8_t cs, uint8_t rs, uint8_t sid,
-//  uint8_t sclk, uint8_t rst) : Adafruit_GFX_AS(ST7735_TFTWIDTH, ST7735_TFTHEIGHT)
-// {
-//   _cs   = cs;
-//   _rs   = rs;
-//   _sid  = sid;
-//   _sclk = sclk;
-//   _rst  = rst;
-//   hwSPI = false;
-// }
-
-
-// // Constructor when using hardware SPI.  Faster, but must use SPI pins
-// // specific to each board type (e.g. 11,13 for Uno, 51,52 for Mega, etc.)
-// Adafruit_ST7735_AS::Adafruit_ST7735_AS(uint8_t cs, uint8_t rs, uint8_t rst) :
-//     Adafruit_GFX_AS(ST7735_TFTWIDTH, ST7735_TFTHEIGHT) {
-//   _cs   = cs;
-//   _rs   = rs;
-//   _rst  = rst;
-//   hwSPI = true;
-//   _sid  = _sclk = 0;
-// }
-
-
-
-
 #if !defined(SPARK)
 // Constructor when using software SPI.  All output pins are configurable.
 Adafruit_ST7735_AS::Adafruit_ST7735_AS(uint8_t cs, uint8_t rs, uint8_t sid,
@@ -566,6 +539,10 @@ void Adafruit_ST7735_AS::setAddrWindow(uint8_t x0, uint8_t y0, uint8_t x1,
 
 
 void Adafruit_ST7735_AS::pushColor(uint16_t color) {
+#if defined(SPARK)
+  digitalWrite(_rs, HIGH); 
+  digitalWrite(_cs, LOW); 
+#endif
 #ifdef __AVR__
   *rsport |=  rspinmask;
   *csport &= ~cspinmask;
@@ -574,10 +551,13 @@ void Adafruit_ST7735_AS::pushColor(uint16_t color) {
   rsport->PIO_SODR |=  rspinmask;
   csport->PIO_CODR  |=  cspinmask;
 #endif
-  
+
   spiwrite(color >> 8);
   spiwrite(color);
 
+#if defined(SPARK)
+  digitalWrite(_cs, HIGH); 
+#endif
 #ifdef __AVR__
   *csport |= cspinmask;
 #endif
@@ -592,6 +572,10 @@ void Adafruit_ST7735_AS::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
   setAddrWindow(x,y,x+1,y+1);
 
+#if defined(SPARK)
+  digitalWrite(_rs, HIGH); 
+  digitalWrite(_cs, LOW); 
+#endif
 #ifdef __AVR__
   *rsport |=  rspinmask;
   *csport &= ~cspinmask;
@@ -600,10 +584,13 @@ void Adafruit_ST7735_AS::drawPixel(int16_t x, int16_t y, uint16_t color) {
   rsport->PIO_SODR |=  rspinmask;
   csport->PIO_CODR  |=  cspinmask;
 #endif
-  
+
   spiwrite(color >> 8);
   spiwrite(color);
 
+#if defined(SPARK)
+    digitalWrite(_cs, HIGH); 
+#endif
 #ifdef __AVR__
   *csport |= cspinmask;
 #endif
@@ -615,13 +602,17 @@ void Adafruit_ST7735_AS::drawPixel(int16_t x, int16_t y, uint16_t color) {
 
 void Adafruit_ST7735_AS::drawFastVLine(int16_t x, int16_t y, int16_t h,
  uint16_t color) {
-
   // Rudimentary clipping
   if((x >= _width) || (y >= _height)) return;
   if((y+h-1) >= _height) h = _height-y;
   setAddrWindow(x, y, x, y+h-1);
 
   uint8_t hi = color >> 8, lo = color;
+
+#if defined(SPARK)
+  digitalWrite(_rs, HIGH); 
+  digitalWrite(_cs, LOW); 
+#endif
 #ifdef __AVR__
   *rsport |=  rspinmask;
   *csport &= ~cspinmask;
@@ -634,6 +625,10 @@ void Adafruit_ST7735_AS::drawFastVLine(int16_t x, int16_t y, int16_t h,
     spiwrite(hi);
     spiwrite(lo);
   }
+
+#if defined(SPARK)
+  digitalWrite(_cs, HIGH); 
+#endif
 #ifdef __AVR__
   *csport |= cspinmask;
 #endif
@@ -652,6 +647,10 @@ void Adafruit_ST7735_AS::drawFastHLine(int16_t x, int16_t y, int16_t w,
   setAddrWindow(x, y, x+w-1, y);
 
   uint8_t hi = color >> 8, lo = color;
+#if defined(SPARK)
+  digitalWrite(_rs, HIGH); 
+  digitalWrite(_cs, LOW); 
+#endif
 #ifdef __AVR__
   *rsport |=  rspinmask;
   *csport &= ~cspinmask;
@@ -664,6 +663,9 @@ void Adafruit_ST7735_AS::drawFastHLine(int16_t x, int16_t y, int16_t w,
     spiwrite(hi);
     spiwrite(lo);
   }
+#if defined(SPARK)
+  digitalWrite(_cs, HIGH); 
+#endif
 #ifdef __AVR__
   *csport |= cspinmask;
 #endif
@@ -692,6 +694,10 @@ void Adafruit_ST7735_AS::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
   setAddrWindow(x, y, x+w-1, y+h-1);
 
   uint8_t hi = color >> 8, lo = color;
+#if defined(SPARK)
+  digitalWrite(_rs, HIGH); 
+  digitalWrite(_cs, LOW); 
+#endif
 #ifdef __AVR__
   *rsport |=  rspinmask;
   *csport &= ~cspinmask;
@@ -707,6 +713,9 @@ void Adafruit_ST7735_AS::fillRect(int16_t x, int16_t y, int16_t w, int16_t h,
     }
   }
 
+#if defined(SPARK)
+  digitalWrite(_cs, HIGH); 
+#endif
 #ifdef __AVR__
   *csport |= cspinmask;
 #endif
@@ -778,115 +787,3 @@ void Adafruit_ST7735_AS::setRotation(uint8_t m) {
 void Adafruit_ST7735_AS::invertDisplay(boolean i) {
   writecommand(i ? ST7735_INVON : ST7735_INVOFF);
 }
-
-
-////////// stuff not actively being used, but kept for posterity
-/*
-
- uint8_t Adafruit_ST7735_AS::spiread(void) {
- uint8_t r = 0;
- if (_sid > 0) {
- r = shiftIn(_sid, _sclk, MSBFIRST);
- } else {
- //SID_DDR &= ~_BV(SID);
- //int8_t i;
- //for (i=7; i>=0; i--) {
- //  SCLK_PORT &= ~_BV(SCLK);
- //  r <<= 1;
- //  r |= (SID_PIN >> SID) & 0x1;
- //  SCLK_PORT |= _BV(SCLK);
- //}
- //SID_DDR |= _BV(SID);
- 
- }
- return r;
- }
- 
- 
- void Adafruit_ST7735_AS::dummyclock(void) {
- 
- if (_sid > 0) {
- digitalWrite(_sclk, LOW);
- digitalWrite(_sclk, HIGH);
- } else {
- // SCLK_PORT &= ~_BV(SCLK);
- //SCLK_PORT |= _BV(SCLK);
- }
- }
- uint8_t Adafruit_ST7735_AS::readdata(void) {
- *portOutputRegister(rsport) |= rspin;
- 
- *portOutputRegister(csport) &= ~ cspin;
- 
- uint8_t r = spiread();
- 
- *portOutputRegister(csport) |= cspin;
- 
- return r;
- 
- } 
- 
- uint8_t Adafruit_ST7735_AS::readcommand8(uint8_t c) {
- digitalWrite(_rs, LOW);
- 
- *portOutputRegister(csport) &= ~ cspin;
- 
- spiwrite(c);
- 
- digitalWrite(_rs, HIGH);
- pinMode(_sid, INPUT); // input!
- digitalWrite(_sid, LOW); // low
- spiread();
- uint8_t r = spiread();
- 
- 
- *portOutputRegister(csport) |= cspin;
- 
- 
- pinMode(_sid, OUTPUT); // back to output
- return r;
- }
- 
- 
- uint16_t Adafruit_ST7735_AS::readcommand16(uint8_t c) {
- digitalWrite(_rs, LOW);
- if (_cs)
- digitalWrite(_cs, LOW);
- 
- spiwrite(c);
- pinMode(_sid, INPUT); // input!
- uint16_t r = spiread();
- r <<= 8;
- r |= spiread();
- if (_cs)
- digitalWrite(_cs, HIGH);
- 
- pinMode(_sid, OUTPUT); // back to output
- return r;
- }
- 
- uint32_t Adafruit_ST7735_AS::readcommand32(uint8_t c) {
- digitalWrite(_rs, LOW);
- if (_cs)
- digitalWrite(_cs, LOW);
- spiwrite(c);
- pinMode(_sid, INPUT); // input!
- 
- dummyclock();
- dummyclock();
- 
- uint32_t r = spiread();
- r <<= 8;
- r |= spiread();
- r <<= 8;
- r |= spiread();
- r <<= 8;
- r |= spiread();
- if (_cs)
- digitalWrite(_cs, HIGH);
- 
- pinMode(_sid, OUTPUT); // back to output
- return r;
- }
- 
- */
