@@ -31,7 +31,7 @@
 #endif
 
 
-#include <Adafruit_GFX_AS.h>
+#include "Adafruit_GFX_AS.h"
 
 
 #if defined(SPARK)
@@ -157,6 +157,12 @@ class Adafruit_ST7735_AS : public Adafruit_GFX_AS {
 
   boolean  hwSPI;
 
+
+#if defined(SPARK)
+  uint8_t  _cs, _rs, _rst;
+  uint8_t  colstart, rowstart; // some displays need this changed
+#endif
+  
 #if defined(__AVR__) || defined(CORE_TEENSY)
 volatile uint8_t *dataport, *clkport, *csport, *rsport;
   uint8_t  _cs, _rs, _rst, _sid, _sclk,

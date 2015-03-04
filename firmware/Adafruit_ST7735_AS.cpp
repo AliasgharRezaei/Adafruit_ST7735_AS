@@ -17,16 +17,53 @@
  ****************************************************/
 
 #include "Adafruit_ST7735_AS.h"
-#include <limits.h>
+
+
+#define SPARK 1 // !!!!!!!!!!! TEMPORARILY !!!!!!!!!
+
+#if defined(SPARK)
+ #define PROGMEM
+#else
 #include "pins_arduino.h"
 #include "wiring_private.h"
 #include <SPI.h>
+#endif
+
+
 
 inline uint16_t swapcolor(uint16_t x) { 
   return (x << 11) | (x & 0x07E0) | (x >> 11);
 }
 
 
+// // Constructor when using software SPI.  All output pins are configurable.
+// Adafruit_ST7735_AS::Adafruit_ST7735_AS(uint8_t cs, uint8_t rs, uint8_t sid,
+//  uint8_t sclk, uint8_t rst) : Adafruit_GFX_AS(ST7735_TFTWIDTH, ST7735_TFTHEIGHT)
+// {
+//   _cs   = cs;
+//   _rs   = rs;
+//   _sid  = sid;
+//   _sclk = sclk;
+//   _rst  = rst;
+//   hwSPI = false;
+// }
+
+
+// // Constructor when using hardware SPI.  Faster, but must use SPI pins
+// // specific to each board type (e.g. 11,13 for Uno, 51,52 for Mega, etc.)
+// Adafruit_ST7735_AS::Adafruit_ST7735_AS(uint8_t cs, uint8_t rs, uint8_t rst) :
+//     Adafruit_GFX_AS(ST7735_TFTWIDTH, ST7735_TFTHEIGHT) {
+//   _cs   = cs;
+//   _rs   = rs;
+//   _rst  = rst;
+//   hwSPI = true;
+//   _sid  = _sclk = 0;
+// }
+
+
+
+
+#if !defined(SPARK)
 // Constructor when using software SPI.  All output pins are configurable.
 Adafruit_ST7735_AS::Adafruit_ST7735_AS(uint8_t cs, uint8_t rs, uint8_t sid,
  uint8_t sclk, uint8_t rst) : Adafruit_GFX_AS(ST7735_TFTWIDTH, ST7735_TFTHEIGHT)
@@ -38,7 +75,7 @@ Adafruit_ST7735_AS::Adafruit_ST7735_AS(uint8_t cs, uint8_t rs, uint8_t sid,
   _rst  = rst;
   hwSPI = false;
 }
-
+#endif
 
 // Constructor when using hardware SPI.  Faster, but must use SPI pins
 // specific to each board type (e.g. 11,13 for Uno, 51,52 for Mega, etc.)
@@ -48,7 +85,9 @@ Adafruit_ST7735_AS::Adafruit_ST7735_AS(uint8_t cs, uint8_t rs, uint8_t rst) :
   _rs   = rs;
   _rst  = rst;
   hwSPI = true;
+#if !defined(SPARK)
   _sid  = _sclk = 0;
+#endif
 }
 
 #if defined(CORE_TEENSY) && !defined(__AVR__)
@@ -309,6 +348,13 @@ void Adafruit_ST7735_AS::commonInit(const uint8_t *cmdList) {
 
   pinMode(_rs, OUTPUT);
   pinMode(_cs, OUTPUT);
+#if defined(SPARK)
+  SPI.begin();
+  SPI.setClockDivider(SPI_CLOCK_DIV4); // 4 MHz (half speed)
+  //Due defaults to 4mHz (clock divider setting of 21)
+  SPI.setBitOrder(MSBFIRST);
+  SPI.setDataMode(SPI_MODE0);
+#endif
 #ifdef __AVR__
   csport    = portOutputRegister(digitalPinToPort(_cs));
   rsport    = portOutputRegister(digitalPinToPort(_rs));
@@ -317,9 +363,11 @@ void Adafruit_ST7735_AS::commonInit(const uint8_t *cmdList) {
   csport    = digitalPinToPort(_cs);
   rsport    = digitalPinToPort(_rs);
 #endif
+
+#if !defined(SPARK)
   cspinmask = digitalPinToBitMask(_cs);
   rspinmask = digitalPinToBitMask(_rs);
-
+#endif
   if(hwSPI) { // Using hardware SPI
     SPI.begin();
 #ifdef __AVR__
@@ -333,8 +381,10 @@ void Adafruit_ST7735_AS::commonInit(const uint8_t *cmdList) {
     SPI.setBitOrder(MSBFIRST);
     SPI.setDataMode(SPI_MODE0);
   } else {
+#if !defined(SPARK)      
     pinMode(_sclk, OUTPUT);
     pinMode(_sid , OUTPUT);
+#endif
 #ifdef __AVR__
     clkport     = portOutputRegister(digitalPinToPort(_sclk));
     dataport    = portOutputRegister(digitalPinToPort(_sid));
@@ -343,8 +393,10 @@ void Adafruit_ST7735_AS::commonInit(const uint8_t *cmdList) {
     clkport     = digitalPinToPort(_sclk);
     dataport    = digitalPinToPort(_sid);
 #endif
+#if !defined(SPARK)
     clkpinmask  = digitalPinToBitMask(_sclk);
     datapinmask = digitalPinToBitMask(_sid);
+#endif
 #ifdef __AVR__
     *clkport   &= ~clkpinmask;
     *dataport  &= ~datapinmask;
@@ -356,6 +408,9 @@ void Adafruit_ST7735_AS::commonInit(const uint8_t *cmdList) {
   }
 
   // toggle RST low to reset; CS low so it'll listen to us
+#if defined(SPARK)
+  digitalWrite(_cs, LOW); // *csport &= ~cspinmask;
+#endif
 #ifdef __AVR__
   *csport &= ~cspinmask;
 #endif

@@ -61,12 +61,8 @@ class Adafruit_GFX_AS : public Print {
     int drawRightString(char *string, int dX, int poY, int size);
     int drawFloat(float floatNumber,int decimal,int poX, int poY, int size);
 
-#if ARDUINO >= 100
   virtual size_t write(uint8_t);
-#else
-  virtual void   write(uint8_t);
-#endif
-
+  
   int16_t
     height(void),
     width(void);
