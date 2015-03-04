@@ -3,8 +3,10 @@
 // All other characters print as a space
 
 #include "Font7s.h"
-#include <avr/pgmspace.h>
 
+#ifdef __AVR__
+  #include <avr/pgmspace.h>
+#endif
 
 PROGMEM const unsigned char widtbl_f7s[96] =          // character width table
 {

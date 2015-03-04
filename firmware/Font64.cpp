@@ -5,8 +5,10 @@
 
 
 #include "Font64.h"
-#include <avr/pgmspace.h>
 
+#ifdef __AVR__
+  #include <avr/pgmspace.h>
+#endif
 
 PROGMEM const unsigned char widtbl_f64[96] =          // character width table
 {

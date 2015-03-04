@@ -1,7 +1,10 @@
 // Font size 2
 
 #include "Font16.h"
-#include <avr/pgmspace.h>
+
+#ifdef __AVR__
+  #include <avr/pgmspace.h>
+#endif
 
 
 PROGMEM const unsigned char widtbl_f16[96] =         // character width table
