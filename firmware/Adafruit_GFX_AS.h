@@ -1,14 +1,8 @@
 #ifndef _ADAFRUIT_GFX_AS_H
 #define _ADAFRUIT_GFX_AS_H
 
+#include "application.h"
 #include "Load_fonts.h"
-
-#if ARDUINO >= 100
- #include "Arduino.h"
- #include "Print.h"
-#else
- #include "WProgram.h"
-#endif
 
 #define swap(a, b) { int16_t t = a; a = b; b = t; }
 

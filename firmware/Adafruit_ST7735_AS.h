@@ -19,14 +19,25 @@
 #ifndef _ADAFRUIT_ST7735H_
 #define _ADAFRUIT_ST7735H_
 
+#define SPARK 1 // !!!!!!!!!!! TEMPORARILY !!!!!!!!!
+
 #if ARDUINO >= 100
  #include "Arduino.h"
  #include "Print.h"
+#elif defined (SPARK)
+  #include "application.h"
 #else
  #include "WProgram.h"
 #endif
 
+
 #include <Adafruit_GFX_AS.h>
+
+
+#if defined(SPARK)
+#define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+#define pgm_read_word(addr) (*(const unsigned short *)(addr))
+#endif
 
 #if defined(__SAM3X8E__)
 #include <include/pio.h>
