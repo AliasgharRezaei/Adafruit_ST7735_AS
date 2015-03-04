@@ -34,7 +34,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "Adafruit_GFX_AS.h"
 
 #ifdef LOAD_GLCD
-  #include "glcdfont.c"
+  #include "glcdfont.cpp"
 #endif
 
 #ifdef LOAD_FONT2
