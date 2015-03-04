@@ -4,7 +4,7 @@
 #ifdef __AVR__
  #include <avr/io.h>
  #include <avr/pgmspace.h>
-#elif defined(__SAM3X8E__)
+#else
  #define PROGMEM
 #endif
  
