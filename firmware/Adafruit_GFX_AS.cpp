@@ -637,7 +637,7 @@ int Adafruit_GFX_AS::drawString(char *string, int poX, int poY, int size)
     {
         int xPlus = drawChar(*string, poX, poY, size);
         sumX += xPlus;
-        *string++;
+        string++;
         poX += xPlus;                            /* Move cursor right       */
     }
     return sumX;
@@ -673,7 +673,7 @@ int Adafruit_GFX_AS::drawCentreString(char *string, int dX, int poY, int size)
         #ifdef LOAD_FONT7
                 if (size==7) len += pgm_read_byte(widtbl_f7s+ascii-32)+2;
         #endif
-        *pointer++;
+        pointer++;
     }
     len = len*textsize;
     int poX = dX - len/2;
@@ -685,7 +685,7 @@ int Adafruit_GFX_AS::drawCentreString(char *string, int dX, int poY, int size)
         
         int xPlus = drawChar(*string, poX, poY, size);
         sumX += xPlus;
-        *string++;
+        string++;
         poX += xPlus;                  /* Move cursor right            */
     }
     
@@ -723,7 +723,7 @@ int Adafruit_GFX_AS::drawRightString(char *string, int dX, int poY, int size)
                 if (size==7) len += pgm_read_byte(widtbl_f7s+ascii-32)+2;
         #endif
                 
-        *pointer++;
+        pointer++;
     }
     
     len = len*textsize;
@@ -736,7 +736,7 @@ int Adafruit_GFX_AS::drawRightString(char *string, int dX, int poY, int size)
         
         int xPlus = drawChar(*string, poX, poY, size);
         sumX += xPlus;
-        *string++;
+        string++;
         poX += xPlus;          /* Move cursor right            */
     }
     
