@@ -33,6 +33,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "Adafruit_GFX_AS.h"
 
+#include "application.h"
+
 #ifdef LOAD_GLCD
   #include "glcdfont.cpp"
 #endif
@@ -533,6 +535,7 @@ int Adafruit_GFX_AS::drawUnicode(unsigned int uniCode, int x, int y, int size)
      flash_address = pgm_read_word(&chrtbl_f32[uniCode]);
      width = pgm_read_byte(widtbl_f32+uniCode);
      height = chr_hgt_f32;
+     Serial.println("width: " + width);
      gap = -3;
    }
 #endif
