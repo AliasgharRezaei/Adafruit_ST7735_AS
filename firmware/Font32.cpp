@@ -1,13 +1,17 @@
 // Font size 4
 
-#include "Font32.h"
+// #include "Font32.h"
 
 #ifdef __AVR__
   #include <avr/pgmspace.h>
 #else
  #define PROGMEM
 #endif
- 
+ #define nr_chrs_f32 96
+#define chr_hgt_f32 26
+#define data_size_f32 8
+#define firstchr_f32 32
+
 PROGMEM const unsigned char widtbl_f32[96] =         // character width table
 {
         8, 11, 11, 22, 17, 24, 20, 9,       // char 32 - 39

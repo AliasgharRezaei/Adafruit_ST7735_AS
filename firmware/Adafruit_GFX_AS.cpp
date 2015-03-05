@@ -40,19 +40,19 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #ifdef LOAD_FONT2
-  #include "Font16.h"
+  #include "Font16.cpp"
 #endif
 
 #ifdef LOAD_FONT4
-#include "Font32.h"
+#include "Font32.cpp"
 #endif
 
 #ifdef LOAD_FONT6
-#include "Font64.h"
+#include "Font64.cpp"
 #endif
 
 #ifdef LOAD_FONT7
-  #include "Font7s.h"
+  #include "Font7s.cpp"
 #endif
 
 
