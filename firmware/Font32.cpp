@@ -4,8 +4,10 @@
 
 #ifdef __AVR__
   #include <avr/pgmspace.h>
+#else
+ #define PROGMEM
 #endif
-
+ 
 PROGMEM const unsigned char widtbl_f32[96] =         // character width table
 {
         8, 11, 11, 22, 17, 24, 20, 9,       // char 32 - 39
