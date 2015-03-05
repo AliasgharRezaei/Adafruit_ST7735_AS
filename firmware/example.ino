@@ -7,20 +7,24 @@
 #define rst  0  
 #define sd_cs  4
 
-#include "application.h"
+// #include "application.h"
 
 // this variable represents the image to be drawn on screen
 // PImage logo;
 
+Adafruit_ST7735_AS tft = Adafruit_ST7735_AS(cs, dc, rst);
+// this variable represents the image to be drawn on screen
+// PImage logo;
+
 unsigned long targetTime = 0;
-byte red = 31;
-byte green = 0;
-byte blue = 0;
-byte state = 0;
+int red = 31;
+int green = 0;
+int blue = 0;
+int state = 0;
 unsigned int colour = red << 11;
 
 void setup(void) {
-  tft.G();
+  tft.initG();
   tft.setRotation(1);
   tft.fillScreen(ST7735_BLACK);
 
