@@ -33,26 +33,24 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "Adafruit_GFX_AS.h"
 
-#include "application.h"
-
 #ifdef LOAD_GLCD
   #include "glcdfont.cpp"
 #endif
 
 #ifdef LOAD_FONT2
-  #include "Font16.cpp"
+  #include "Font16.h"
 #endif
 
 #ifdef LOAD_FONT4
-#include "Font32.cpp"
+#include "Font32.h"
 #endif
 
 #ifdef LOAD_FONT6
-#include "Font64.cpp"
+#include "Font64.h"
 #endif
 
 #ifdef LOAD_FONT7
-  #include "Font7s.cpp"
+  #include "Font7s.h"
 #endif
 
 
