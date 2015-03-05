@@ -54,7 +54,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 
-#define pgm_read_byte(addr) (*(const uint8_t *)(addr))
+#define pgm_read_byte(addr) (*(const unsigned char *)(addr))
 #define pgm_read_word(addr) (*(const uint8_t *)(addr))
 
 
